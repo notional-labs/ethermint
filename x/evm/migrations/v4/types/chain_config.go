@@ -17,7 +17,7 @@ import (
 
 // EthereumConfig returns an Ethereum ChainConfig for EVM state transitions.
 // All the negative or nil values are converted to nil
-func (cc ChainConfig) EthereumConfig(chainID *big.Int) *params.ChainConfig {
+func (cc V4ChainConfig) EthereumConfig(chainID *big.Int) *params.ChainConfig {
 	return &params.ChainConfig{
 		ChainID:                 chainID,
 		HomesteadBlock:          getBlockValue(cc.HomesteadBlock),
@@ -46,7 +46,7 @@ func (cc ChainConfig) EthereumConfig(chainID *big.Int) *params.ChainConfig {
 }
 
 // DefaultChainConfig returns default evm parameters.
-func DefaultChainConfig() ChainConfig {
+func DefaultChainConfig() V4ChainConfig {
 	homesteadBlock := sdk.ZeroInt()
 	daoForkBlock := sdk.ZeroInt()
 	eip150Block := sdk.ZeroInt()
@@ -63,7 +63,7 @@ func DefaultChainConfig() ChainConfig {
 	grayGlacierBlock := sdk.ZeroInt()
 	mergeNetsplitBlock := sdk.ZeroInt()
 
-	return ChainConfig{
+	return V4ChainConfig{
 		HomesteadBlock:      &homesteadBlock,
 		DAOForkBlock:        &daoForkBlock,
 		DAOForkSupport:      true,
@@ -94,7 +94,7 @@ func getBlockValue(block *sdkmath.Int) *big.Int {
 
 // Validate performs a basic validation of the ChainConfig params. The function will return an error
 // if any of the block values is uninitialized (i.e nil) or if the EIP150Hash is an invalid hash.
-func (cc ChainConfig) Validate() error {
+func (cc V4ChainConfig) Validate() error {
 	if err := validateBlock(cc.HomesteadBlock); err != nil {
 		return errorsmod.Wrap(err, "homesteadBlock")
 	}

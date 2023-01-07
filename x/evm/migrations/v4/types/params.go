@@ -23,7 +23,7 @@ var (
 	DefaultAllowUnprotectedTxs = false
 	DefaultEnableCreate        = true
 	DefaultEnableCall          = true
-	DefaultExtraEIPs           = ExtraEIPs{AvailableExtraEIPs}
+	DefaultExtraEIPs           = V4ExtraEIPs{AvailableExtraEIPs}
 )
 
 // Parameter keys
@@ -49,14 +49,14 @@ func ParamKeyTable() paramtypes.KeyTable {
 }
 
 // NewParams creates a new Params instance
-func NewParams(evmDenom string, allowUnprotectedTxs, enableCreate, enableCall bool, config ChainConfig, extraEIPs ExtraEIPs) V4Params {
+func NewParams(evmDenom string, allowUnprotectedTxs, enableCreate, enableCall bool, config V4ChainConfig, extraEIPs V4ExtraEIPs) V4Params {
 	return V4Params{
 		EvmDenom:            evmDenom,
 		AllowUnprotectedTxs: allowUnprotectedTxs,
 		EnableCreate:        enableCreate,
 		EnableCall:          enableCall,
-		ExtraEIPs:           extraEIPs,
-		ChainConfig:         config,
+		V4ExtraEIPs:         extraEIPs,
+		V4ChainConfig:       config,
 	}
 }
 
@@ -67,8 +67,8 @@ func DefaultParams() V4Params {
 		EvmDenom:            DefaultEVMDenom,
 		EnableCreate:        DefaultEnableCreate,
 		EnableCall:          DefaultEnableCall,
-		ChainConfig:         DefaultChainConfig(),
-		ExtraEIPs:           DefaultExtraEIPs,
+		V4ChainConfig:       DefaultChainConfig(),
+		V4ExtraEIPs:         DefaultExtraEIPs,
 		AllowUnprotectedTxs: DefaultAllowUnprotectedTxs,
 	}
 }
@@ -79,8 +79,8 @@ func (p *V4Params) ParamSetPairs() paramtypes.ParamSetPairs {
 		paramtypes.NewParamSetPair(ParamStoreKeyEVMDenom, &p.EvmDenom, validateEVMDenom),
 		paramtypes.NewParamSetPair(ParamStoreKeyEnableCreate, &p.EnableCreate, validateBool),
 		paramtypes.NewParamSetPair(ParamStoreKeyEnableCall, &p.EnableCall, validateBool),
-		paramtypes.NewParamSetPair(ParamStoreKeyExtraEIPs, &p.ExtraEIPs, validateEIPs),
-		paramtypes.NewParamSetPair(ParamStoreKeyChainConfig, &p.ChainConfig, validateChainConfig),
+		paramtypes.NewParamSetPair(ParamStoreKeyExtraEIPs, &p.V4ExtraEIPs, validateEIPs),
+		paramtypes.NewParamSetPair(ParamStoreKeyChainConfig, &p.V4ChainConfig, validateChainConfig),
 		paramtypes.NewParamSetPair(ParamStoreKeyAllowUnprotectedTxs, &p.AllowUnprotectedTxs, validateBool),
 	}
 }
@@ -91,17 +91,17 @@ func (p V4Params) Validate() error {
 		return err
 	}
 
-	if err := validateEIPs(p.ExtraEIPs); err != nil {
+	if err := validateEIPs(p.V4ExtraEIPs); err != nil {
 		return err
 	}
 
-	return p.ChainConfig.Validate()
+	return p.V4ChainConfig.Validate()
 }
 
 // EIPs returns the ExtraEIPS as a int slice
 func (p V4Params) EIPs() []int {
-	eips := make([]int, len(p.ExtraEIPs.EIPs))
-	for i, eip := range p.ExtraEIPs.EIPs {
+	eips := make([]int, len(p.V4ExtraEIPs.EIPs))
+	for i, eip := range p.V4ExtraEIPs.EIPs {
 		eips[i] = int(eip)
 	}
 	return eips
@@ -125,7 +125,7 @@ func validateBool(i interface{}) error {
 }
 
 func validateEIPs(i interface{}) error {
-	eips, ok := i.(ExtraEIPs)
+	eips, ok := i.(V4ExtraEIPs)
 	if !ok {
 		return fmt.Errorf("invalid EIP slice type: %T", i)
 	}
@@ -140,7 +140,7 @@ func validateEIPs(i interface{}) error {
 }
 
 func validateChainConfig(i interface{}) error {
-	cfg, ok := i.(ChainConfig)
+	cfg, ok := i.(V4ChainConfig)
 	if !ok {
 		return fmt.Errorf("invalid chain config type: %T", i)
 	}

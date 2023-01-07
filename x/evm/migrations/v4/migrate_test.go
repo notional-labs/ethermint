@@ -51,11 +51,11 @@ func TestMigrate(t *testing.T) {
 	enableCreate := kvStore.Has(v4types.ParamStoreKeyEnableCreate)
 	enableCall := kvStore.Has(v4types.ParamStoreKeyEnableCall)
 
-	var chainCfg v4types.ChainConfig
+	var chainCfg v4types.V4ChainConfig
 	bz = kvStore.Get(v4types.ParamStoreKeyChainConfig)
 	cdc.MustUnmarshal(bz, &chainCfg)
 
-	var extraEIPs v4types.ExtraEIPs
+	var extraEIPs v4types.V4ExtraEIPs
 	bz = kvStore.Get(v4types.ParamStoreKeyExtraEIPs)
 	cdc.MustUnmarshal(bz, &extraEIPs)
 

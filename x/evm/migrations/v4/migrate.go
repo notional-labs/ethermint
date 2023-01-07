@@ -28,8 +28,8 @@ func MigrateStore(
 		return err
 	}
 
-	chainCfgBz := cdc.MustMarshal(&params.ChainConfig)
-	extraEIPsBz := cdc.MustMarshal(&v4types.ExtraEIPs{EIPs: v4types.AvailableExtraEIPs})
+	chainCfgBz := cdc.MustMarshal(&params.V4ChainConfig)
+	extraEIPsBz := cdc.MustMarshal(&v4types.V4ExtraEIPs{EIPs: v4types.AvailableExtraEIPs})
 
 	store.Set(v4types.ParamStoreKeyEVMDenom, []byte(params.EvmDenom))
 	store.Set(v4types.ParamStoreKeyExtraEIPs, extraEIPsBz)
